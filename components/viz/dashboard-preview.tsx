@@ -26,7 +26,7 @@ import { formatCompact, formatNumber, formatPercent, formatShortDate, formatSign
  * The integrity-critical component (design-system §6.6). Seven figures are
  * required and the coverage contract is explicit:
  *
- *   equity curve   → panel 1 (area, series-1 with an 8% wash)
+   *   equity curve   → panel 1 (area, series-1 with an 8% maximum-alpha wash)
  *   daily returns  → panel 2 (signed bars, series-1 / series-6)
  *   volatility     → KPI 4  (daily standard deviation of returns)
  *   Sharpe         → KPI 2
@@ -260,8 +260,8 @@ export function DashboardPreview() {
                   <AreaChart accessibilityLayer={false} data={rows} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
                     <defs>
                       <linearGradient id="equity-wash" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="var(--color-series-1)" stopOpacity="0.16" />
-                        <stop offset="100%" stopColor="var(--color-series-1)" stopOpacity="0.02" />
+        <stop offset="0%" stopColor="var(--color-series-1)" stopOpacity="0.08" />
+        <stop offset="100%" stopColor="var(--color-series-1)" stopOpacity="0" />
                       </linearGradient>
                     </defs>
                     <CartesianGrid stroke={gridStroke} strokeDasharray="2 4" vertical={false} />

@@ -54,9 +54,8 @@ export default function StrategiesPage() {
                     ))}
                   </div>
 
-                  <AccordionTrigger aria-label={`${strategy.name}: mathematical intuition, market data, risk and implementation`}>
-                    <span aria-hidden="true">Mathematical intuition, market data, risk and implementation</span>
-                    <span className="sr-only">{strategy.name}: mathematical intuition, market data, risk and implementation</span>
+                  <AccordionTrigger aria-label={`${strategy.name} details`}>
+                    <span>{strategy.name} details</span>
                   </AccordionTrigger>
                   <AccordionContent forceMount>
                     <div className="flex flex-col gap-8">

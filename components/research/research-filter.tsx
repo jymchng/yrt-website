@@ -24,9 +24,9 @@ import {
  *
  * The initial state comes from `searchParams` on the server, so the first paint
  * is already filtered — no flash of the unfiltered list. Local state drives the
- * list immediately; the URL is updated with `router.replace(..., {scroll:false})`
- * so back/forward restore a filtered view, and an external URL change (a back
- * button, a shared link) is adopted back into local state.
+   * list immediately; category changes create history entries, while debounced
+ * text edits replace the current entry to avoid one history item per keystroke.
+ * External URL changes (back/forward) are adopted into local state.
  */
 export function ResearchFilter({
   entries,
@@ -47,6 +47,8 @@ export function ResearchFilter({
   const urlCategory = searchParams.get('category') ?? '';
   const urlQuery = searchParams.get('q') ?? '';
   const parsed = useMemo(() => parseFilter({ category: urlCategory, q: urlQuery }), [urlCategory, urlQuery]);
+  const unknownCategory = parsed.unknownCategory;
+  const parsedQuery = parsed.state.query;
 
   /**
    * Adopt an externally-driven URL change (back/forward, a shared link).
@@ -68,17 +70,22 @@ export function ResearchFilter({
     const next = buildQueryString({ category, query });
     if (current === next) return;
 
+    // An unknown category stays in the URL on first load so its warning remains
+    // visible. Once the user changes a filter, synchronize the intentional state.
+    if (unknownCategory && category === '' && query === parsedQuery) return;
+
     const timer = setTimeout(() => {
-      router.replace(`${pathname}${next}`, { scroll: false });
+      const categoryChanged = urlCategory !== category;
+      if (categoryChanged) router.push(`${pathname}${next}`, { scroll: false });
+      else router.replace(`${pathname}${next}`, { scroll: false });
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [category, query, pathname, router, urlCategory, urlQuery]);
+  }, [category, query, pathname, router, urlCategory, urlQuery, unknownCategory, parsedQuery]);
 
   const results = useMemo(() => filterEntries(entries, { category, query }), [entries, category, query]);
   const resultsText = describeResults(results.length, category, query);
   const overLength = query.length >= MAX_QUERY_LENGTH;
-  const unknownCategory = parsed.unknownCategory;
 
   const clear = () => {
     setCategory('');
@@ -141,7 +148,7 @@ export function ResearchFilter({
           ) : null}
           {category ? <Badge variant="neutral">Category filter active</Badge> : null}
           {query.trim() ? <Badge variant="neutral">Text filter active</Badge> : null}
-          {category || query.trim() ? (
+          {unknownCategory || category || query.trim() ? (
             <button
               type="button"
               onClick={clear}
