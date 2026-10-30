@@ -4,8 +4,10 @@ Two suites, deliberately separated by what they can prove.
 
 | Suite | Runner | Location | Count | Cost | Proves |
 |---|---|---|---|---|---|
-| Unit | Vitest (jsdom) | `tests/unit` | 91 assertions across 10 files | ~13 s | Content integrity, pure logic, formatting, SEO strings, the server action's branches |
-| End-to-end | Playwright | `tests/e2e` | 108 runs (54 tests × desktop + mobile) | ~5 min | The real prerendered HTML, keyboard behaviour, responsive layout, the contact round-trip |
+| Unit | Vitest (jsdom) | `tests/unit` | 91 tests across 10 files | ~12 s on Node 25.9 | Content integrity, pure logic, formatting, SEO strings, the server action's branches |
+| End-to-end | Playwright | `tests/e2e` | 148 runs (74 tests × desktop + mobile) | ~4 min | Production HTML, keyboard behaviour, responsive layout, and contact behavior |
+
+**Latest recorded verification:** typecheck, lint, unit tests, production build (24 generated pages) and contrast audit passed on Node 25.9. The full Playwright run completed but did **not** pass. Failures include research filter URL updates/clearing and history, strategy accordion visibility, dashboard values/period behavior, contact validation/focus and unconfigured-mail state, mobile navigation, and technology-page overflow at 390px. These are application failures, not environment-blocked checks; see the pending runtime-remediation goal and rerun the affected suite after those fixes.
 
 ```bash
 pnpm test          # unit only — fast enough to run on every save
@@ -105,14 +107,15 @@ stop it if you need the config's env overrides to apply.
 
 ## 5. Regressions these suites have already caught
 
-| Finding | Covered by |
+| Finding | Status / coverage |
 |---|---|
-| Horizontal overflow on `/technology` at 390px (612px of content in a 390px viewport) — a code `<pre>` without `min-w-0`, and an over-wide caution badge | `responsive.spec.ts` |
-| The header CTA painted at every width because a bare `hidden` utility lost the cascade to `buttonVariants`' `inline-flex`, overflowing 768px by 7px | `responsive.spec.ts` |
-| Counter values stuck at 0 under reduced motion, because the final value depended on a `requestAnimationFrame` callback that a throttled tab never runs | `accessibility.spec.ts` |
-| The strategies accordion's collapsed region rendering fully visible and exposed to assistive technology while the trigger claimed `aria-expanded="false"` | `navigation.spec.ts` |
-| An architecture figure with no accessible name; an unlabelled research results list | `navigation.spec.ts`, `accessibility.spec.ts` |
-| The homepage title falling back to the template default instead of stating itself | `seo.test.ts` |
+| Strategies disclosure closed-state visibility/accessibility mismatch | Still fails current Playwright assertion; queued for remediation |
+| Research filter URL updates/clear and browser-history synchronization | Still fails current Playwright checks; queued for remediation |
+| Dashboard final counter values/period captions | Still fails current Playwright checks; queued for remediation |
+| Contact invalid-submit focus and unconfigured-mail E2E state | Still fails current Playwright checks; queued for remediation |
+| Mobile navigation interaction | Still fails current Playwright checks; queued for remediation |
+| Horizontal overflow on `/technology` at 390px | Still fails current Playwright checks; queued for remediation |
+| Earlier strategy accessible naming, unknown research category fallback, and gradient alpha fixes | Implemented; verify again when rerunning the full suite |
 
 ## 6. What is not covered
 

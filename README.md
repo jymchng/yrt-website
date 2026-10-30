@@ -20,8 +20,7 @@ cp .env.example .env.local     # optional: the site renders fully without any of
 pnpm dev                       # http://localhost:3000
 ```
 
-Node **≥ 22.12** (declared in `package.json#engines`; developed on Node 25.9).
-Package manager is **pnpm** (`packageManager: pnpm@9.15.9`).
+Node **≥ 22.12** (declared in `package.json#engines`; latest full verification used Node 25.9). Vitest currently fails to start under the available Node 21.7 runtime due to an incompatibility in rolldown's terminal styling; use the declared Node engine or later. Package manager is **pnpm** (`packageManager: pnpm@9.15.9`).
 
 ## 2. Scripts
 
@@ -130,8 +129,12 @@ reports a success it did not achieve.
 
 ## 7. Known limitations
 
-- **Rate limiting is per instance, in memory.** Behind more than one instance the effective
-  limit is per process, not per site. Documented at the implementation in
+- **Current E2E limitation:** the production Playwright run has unresolved failures in research filter URL/history behavior, strategy accordion visibility, dashboard period/counter rendering, contact form validation/focus and unconfigured-mail state, mobile navigation, and technology overflow at 390px. See [`docs/testing.md`](docs/testing.md); do not treat E2E as passing until the suite is rerun successfully.
+- **Netlify package-manager setup:** `netlify.toml` retains Node 22.12.0 and sets
+  `COREPACK_INTEGRITY_KEYS = "0"` to bypass the bundled Corepack signature-key mismatch
+  during dependency installation. This disables integrity-key verification and is a
+  workaround, not hosted verification; see [`docs/deployment.md`](docs/deployment.md).
+- **Rate limiting is per instance, in memory.** Behind more than one instance the effective limit is per process, not per site. Documented at the implementation in
   `app/contact/actions.ts`.
 - **The architecture diagram is descriptive, not a deployed topology.** It illustrates how
   the components in `docs/architecture.md` relate; it is not a running system.
