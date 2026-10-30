@@ -5,9 +5,9 @@ Two suites, deliberately separated by what they can prove.
 | Suite | Runner | Location | Count | Cost | Proves |
 |---|---|---|---|---|---|
 | Unit | Vitest (jsdom) | `tests/unit` | 91 tests across 10 files | ~12 s on Node 25.9 | Content integrity, pure logic, formatting, SEO strings, the server action's branches |
-| End-to-end | Playwright | `tests/e2e` | 148 runs (74 tests × desktop + mobile) | ~4 min | Production HTML, keyboard behaviour, responsive layout, and contact behavior |
+| End-to-end | Playwright | `tests/e2e` | 156 runs (78 tests × desktop + mobile) | ~4.6 min | Production HTML, keyboard behaviour, responsive layout, and contact behavior |
 
-**Latest recorded verification:** typecheck, lint, unit tests, production build (24 generated pages) and contrast audit passed on Node 25.9. The full Playwright run completed but did **not** pass. Failures include research filter URL updates/clearing and history, strategy accordion visibility, dashboard values/period behavior, contact validation/focus and unconfigured-mail state, mobile navigation, and technology-page overflow at 390px. These are application failures, not environment-blocked checks; see the pending runtime-remediation goal and rerun the affected suite after those fixes.
+**Latest recorded verification:** production Playwright completed with **155 passed, 1 skipped, 0 failed** (156 total across desktop and mobile) on local Node 21.7.3; pnpm warned that the project requires Node `>=22.12`. The skipped run is the mobile-only sheet test under the desktop project. Earlier recorded typecheck, lint, unit tests, production build (24 generated pages), and contrast audit passed on Node 25.9. The Playwright failures previously listed below have been addressed and the full suite rerun successfully; see the regression table in section 5.
 
 ```bash
 pnpm test          # unit only — fast enough to run on every save
@@ -109,12 +109,12 @@ stop it if you need the config's env overrides to apply.
 
 | Finding | Status / coverage |
 |---|---|
-| Strategies disclosure closed-state visibility/accessibility mismatch | Still fails current Playwright assertion; queued for remediation |
-| Research filter URL updates/clear and browser-history synchronization | Still fails current Playwright checks; queued for remediation |
-| Dashboard final counter values/period captions | Still fails current Playwright checks; queued for remediation |
-| Contact invalid-submit focus and unconfigured-mail E2E state | Still fails current Playwright checks; queued for remediation |
-| Mobile navigation interaction | Still fails current Playwright checks; queued for remediation |
-| Horizontal overflow on `/technology` at 390px | Still fails current Playwright checks; queued for remediation |
+| Strategies disclosure closed-state visibility/accessibility mismatch | Fixed; full desktop/mobile Playwright suite passed |
+| Research filter URL updates/clear and browser-history synchronization | Filter/clear, share-link, and unknown-category coverage passes in full Playwright suite; browser back/forward is not separately asserted |
+| Dashboard final counter values/period captions | Fixed; full desktop/mobile Playwright suite passed, including reduced-motion coverage |
+| Contact invalid-submit focus and unconfigured-mail E2E state | Fixed; full desktop/mobile Playwright suite passed |
+| Mobile navigation interaction | Fixed; full desktop/mobile Playwright suite passed, including Escape and focus return |
+| Horizontal overflow on `/technology` at 390px | Fixed; responsive and focused technology tests pass in full Playwright suite |
 | Earlier strategy accessible naming, unknown research category fallback, and gradient alpha fixes | Implemented; verify again when rerunning the full suite |
 
 ## 6. What is not covered

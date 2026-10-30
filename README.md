@@ -129,11 +129,12 @@ reports a success it did not achieve.
 
 ## 7. Known limitations
 
-- **Current E2E limitation:** the production Playwright run has unresolved failures in research filter URL/history behavior, strategy accordion visibility, dashboard period/counter rendering, contact form validation/focus and unconfigured-mail state, mobile navigation, and technology overflow at 390px. See [`docs/testing.md`](docs/testing.md); do not treat E2E as passing until the suite is rerun successfully.
+- **E2E verification:** the latest production Playwright run passed 155 tests with 1 expected desktop skip (156 total, desktop and mobile). See [`docs/testing.md`](docs/testing.md) for scope and limitations.
 - **Netlify package-manager setup:** `netlify.toml` retains Node 22.12.0 and sets
   `COREPACK_INTEGRITY_KEYS = "0"` to bypass the bundled Corepack signature-key mismatch
-  during dependency installation. This disables integrity-key verification and is a
-  workaround, not hosted verification; see [`docs/deployment.md`](docs/deployment.md).
+  during dependency installation. A subsequent Netlify deploy was confirmed successful.
+  This disables integrity-key verification and is a workaround; see
+  [`docs/deployment.md`](docs/deployment.md).
 - **Rate limiting is per instance, in memory.** Behind more than one instance the effective limit is per process, not per site. Documented at the implementation in
   `app/contact/actions.ts`.
 - **The architecture diagram is descriptive, not a deployed topology.** It illustrates how

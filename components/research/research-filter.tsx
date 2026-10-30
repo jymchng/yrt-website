@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
@@ -43,6 +43,7 @@ export function ResearchFilter({
 
   const [category, setCategory] = useState(initialCategory);
   const [query, setQuery] = useState(initialQuery);
+  const replaceNextUrl = useRef(false);
 
   const urlCategory = searchParams.get('category') ?? '';
   const urlQuery = searchParams.get('q') ?? '';
@@ -68,7 +69,10 @@ export function ResearchFilter({
   useEffect(() => {
     const current = buildQueryString({ category: urlCategory, query: urlQuery });
     const next = buildQueryString({ category, query });
-    if (current === next) return;
+    if (current === next) {
+      replaceNextUrl.current = false;
+      return;
+    }
 
     // An unknown category stays in the URL on first load so its warning remains
     // visible. Once the user changes a filter, synchronize the intentional state.
@@ -76,8 +80,9 @@ export function ResearchFilter({
 
     const timer = setTimeout(() => {
       const categoryChanged = urlCategory !== category;
-      if (categoryChanged) router.push(`${pathname}${next}`, { scroll: false });
+      if (categoryChanged && !replaceNextUrl.current) router.push(`${pathname}${next}`, { scroll: false });
       else router.replace(`${pathname}${next}`, { scroll: false });
+      replaceNextUrl.current = false;
     }, 200);
 
     return () => clearTimeout(timer);
@@ -88,9 +93,9 @@ export function ResearchFilter({
   const overLength = query.length >= MAX_QUERY_LENGTH;
 
   const clear = () => {
+    replaceNextUrl.current = true;
     setCategory('');
     setQuery('');
-    router.replace(pathname, { scroll: false });
   };
 
   return (

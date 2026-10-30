@@ -57,8 +57,8 @@ export default function StrategiesPage() {
                   <AccordionTrigger aria-label={`${strategy.name} details`}>
                     <span>{strategy.name} details</span>
                   </AccordionTrigger>
-                  <AccordionContent forceMount>
-                    <div className="flex flex-col gap-8">
+                  <AccordionContent>
+                    <div className="min-w-0 flex flex-col gap-8">
                       <div className="flex flex-col gap-3">
                         <h3 className="text-h3 text-text-primary">Mathematical intuition</h3>
                         <Formula spec={strategy.math} />

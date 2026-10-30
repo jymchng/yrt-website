@@ -53,12 +53,12 @@ export function ArchitectureDiagram() {
         {layers.map((layer, layerIndex) => (
           <div key={layer.label} className="flex flex-col gap-2">
             <div className="grid gap-2 rounded-md border border-border bg-surface-card p-4 md:grid-cols-[8rem_1fr]">
-              <p className="font-mono text-eyebrow tracking-[0.14em] text-text-tertiary uppercase">{layer.label}</p>
+              <p className="min-w-0 font-mono text-eyebrow tracking-[0.14em] text-text-tertiary uppercase [overflow-wrap:anywhere]">{layer.label}</p>
               <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {layer.nodes.map((node) => (
                   <li key={node.name} className="flex min-w-0 flex-col gap-0.5 rounded-sm border border-border bg-surface-1 px-3 py-2">
                     <span className="truncate font-mono text-caption text-text-primary">{node.name}</span>
-                    <span className="font-mono text-caption text-text-tertiary">{node.detail}</span>
+                    <span className="min-w-0 font-mono text-caption text-text-tertiary [overflow-wrap:anywhere]">{node.detail}</span>
                   </li>
                 ))}
               </ul>

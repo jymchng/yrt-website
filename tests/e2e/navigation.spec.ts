@@ -44,6 +44,21 @@ test.describe('navigation', () => {
     });
   }
 
+  test('mobile sheet opens, closes on Escape, and returns focus to its trigger', async ({ page }) => {
+    test.skip(!isMobile(page), 'mobile sheet behavior');
+    await page.goto('/');
+
+    const trigger = page.getByRole('button', { name: 'Open navigation menu' });
+    await trigger.click();
+    const sheet = page.getByRole('dialog');
+    await expect(sheet).toBeVisible();
+    await expect(sheet.getByRole('navigation', { name: 'Primary' })).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(sheet).toBeHidden();
+    await expect(trigger).toBeFocused();
+  });
+
   test('navigates from the header without a full page load', async ({ page }) => {
     await page.goto('/');
     await openMobileMenuIfNeeded(page);
@@ -126,7 +141,7 @@ test.describe('the home page tells the whole story', () => {
 });
 
 test.describe('secondary pages keep their substance', () => {
-  test('strategies exposes all seven programmes and keeps detail in the DOM', async ({ page }) => {
+  test('strategies exposes all seven programmes and hides collapsed detail', async ({ page }) => {
     await page.goto('/strategies');
 
     for (const name of [
@@ -141,9 +156,9 @@ test.describe('secondary pages keep their substance', () => {
       await expect(page.getByRole('heading', { level: 2, name, exact: true })).toBeVisible();
     }
 
-    // The disclosure region is present (forceMount) even while collapsed.
+    // Collapsed details must be hidden from sight and assistive technology.
     await expect(page.getByText('Risk considerations').first()).toBeHidden();
-    await page.getByRole('button', { name: /Mathematical intuition, market data/ }).first().click();
+    await page.getByRole('button', { name: 'Statistical Arbitrage details' }).click();
     await expect(page.getByText('Risk considerations').first()).toBeVisible();
   });
 

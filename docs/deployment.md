@@ -20,13 +20,13 @@ jobs and no external services at render time**. Deployment is a build and a `nex
 server action; there is no `output: 'export'` and there must not be one while the contact
 form is server-backed.
 
-  `NODE_VERSION = "22.12.0"`, runs `pnpm build`, publishes `.next`, and sets
+`netlify.toml` sets `NODE_VERSION = "22.12.0"`, runs `pnpm build`, publishes `.next`, and sets
 `COREPACK_INTEGRITY_KEYS = "0"` as a workaround for the reported Corepack/pnpm signature-
 verification failure during dependency installation. `ENABLE_COREPACK = "false"` is also
 retained. Disabling integrity-key verification weakens Corepack's package-manager signature
 validation; prefer restoring verification once Netlify's bundled Corepack metadata is fixed.
-Netlify's behavior has not yet been confirmed by a subsequent hosted deployment. Do not
-lower Node to 20: that would violate the `package.json` engine declaration.
+The owner confirmed a subsequent deployment succeeds with this configuration. Do not lower
+Node to 20: that would violate the `package.json` engine declaration.
 
 ## 2. Build and run
 

@@ -139,7 +139,7 @@ function useIsNarrow() {
 }
 
 function useCountUp(target: number, enabled: boolean) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(target);
   const frame = useRef<number | null>(null);
 
   useEffect(() => {
@@ -215,7 +215,7 @@ export function DashboardPreview() {
               ))}
             </TabsList>
             <p className="font-mono text-caption text-text-tertiary">
-              Period toggle re-slices the same seeded series · {rows.length} buckets
+              Period toggle re-slices the same seeded series · <span data-testid="dashboard-bucket-count">{rows.length}</span> buckets
             </p>
           </div>
 

@@ -20,6 +20,7 @@ export function MobileNav() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+        type="button"
         aria-label="Open navigation menu"
       >
         <Menu aria-hidden="true" className="size-5" />

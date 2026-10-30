@@ -71,7 +71,11 @@ export function ContactForm() {
     if (Object.keys(nextErrors).length > 0) {
       event.preventDefault();
       const first = Object.keys(nextErrors)[0];
-      if (first) formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+      if (first) {
+        // React may commit the inline errors before the browser completes the
+        // submit event; defer focus until that commit so it cannot be displaced.
+        requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus());
+      }
     }
   };
 
@@ -114,7 +118,7 @@ export function ContactForm() {
       </div>
 
       <Field id="subject" label="Subject" error={errors.subject} required>
-        <Select value={subject} onValueChange={(value) => setSubject(value as ContactSubject)} name="subject">
+        <Select value={subject} onValueChange={(value) => setSubject(value as ContactSubject)}>
           <SelectTrigger id="subject" aria-invalid={errors.subject ? true : undefined} aria-describedby={errors.subject ? 'subject-error' : undefined}>
             <SelectValue placeholder="Choose a subject" />
           </SelectTrigger>
@@ -126,6 +130,7 @@ export function ContactForm() {
             ))}
           </SelectContent>
         </Select>
+        <input type="hidden" name="subject" value={subject} />
       </Field>
 
       <Field id="message" label="Message" error={errors.message} required hint={`${MESSAGE_MIN}–${MESSAGE_MAX} characters.`}>

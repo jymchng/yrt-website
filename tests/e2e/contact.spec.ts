@@ -43,6 +43,8 @@ test.describe('contact form', () => {
     await page.getByLabel('Message').fill(
       'We are building a matching-engine simulator and would like to compare latency budgets with your team.',
     );
+    // Ensure the chosen default subject is serialized to the server action.
+    await expect(page.locator('input[type="hidden"][name="subject"]')).toHaveValue('General enquiry');
 
     // The form enforces a minimum elapsed time; a real visitor spends at least
     // this long typing, so the test waits like one rather than racing the trap.
