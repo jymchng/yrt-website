@@ -1,0 +1,342 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- surfaces & text ---- */
+  --color-bg: #09090B;
+  --color-surface-1: #111318;
+  --color-surface-card: #181A20;
+  --color-surface-raised: #1F222A;
+
+  --color-text-primary: #F4F4F5;
+  --color-text-secondary: #A1A1AA;
+  --color-text-tertiary: #8A8A94;
+
+  /* ---- accents ---- */
+  --color-accent: #10B981;
+  --color-accent-hover: #34D399;
+  --color-accent-press: #059669;
+  --color-accent-ink: #09090B; /* the ONLY label colour on accent/info fills */
+  --color-info: #3B82F6;          /* fill + series only - never text */
+  --color-info-text: #60A5FA;     /* the ONLY blue permitted as text/link */
+  --color-negative: #F87171;
+  --color-warning: #FBBF24;
+
+  /* ---- lines ---- */
+  --color-hairline: #23252D;      /* decorative only */
+  --color-border: #31343E;        /* grouping only */
+  --color-border-strong: #74747E; /* required for control boundaries; >=3.44 on every surface */
+  --color-border-hover: #86868F;  /* one perceptible step above border-strong */
+  --color-focus: #10B981;         /* always with outline-offset: 2px */
+
+  --color-selection: #10B98133;
+  --color-overlay: #00000099;
+
+  /* ---- badge washes (6.9; 12% of the hue over surface-card) ---- */
+  --color-wash-neutral: #111318;
+  --color-wash-simulated: #172D2C;
+  --color-wash-illustrative: #1C263A;
+  --color-wash-caution: #332E20;
+  --color-wash-critical: #33242A;
+
+  /* ---- chart series (>=3:1 on surface-card) ---- */
+  --color-series-1: #10B981;
+  --color-series-2: #3B82F6;
+  --color-series-3: #22D3EE;
+  --color-series-4: #FBBF24;
+  --color-series-5: #94A3B8;
+  --color-series-6: #F87171;
+
+  /* ---- families (next/font variables) ---- */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* ---- type scale ---- */
+  --text-display: clamp(2.5rem, 5.5vw, 4.5rem);
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 600;
+
+  --text-h1: clamp(2rem, 3.6vw, 3rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h1--font-weight: 600;
+
+  --text-h2: clamp(1.5rem, 2.4vw, 2rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 600;
+
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 1.0625rem;
+  --text-h4--line-height: 1.4;
+  --text-h4--font-weight: 600;
+
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.55;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.6;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.45;
+  --text-caption--letter-spacing: 0.005em;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.14em;
+  --text-eyebrow--font-weight: 500;
+
+  --text-data-xl: clamp(1.75rem, 3vw, 2.5rem);
+  --text-data-xl--line-height: 1.05;
+  --text-data-xl--letter-spacing: -0.02em;
+  --text-data-xl--font-weight: 500;
+
+  --text-data: 0.875rem;
+  --text-data--line-height: 1.4;
+
+  --text-code: 0.8125rem;
+  --text-code--line-height: 1.6;
+
+  /* ---- shape ---- */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-pill: 999px;
+
+  /* ---- depth (overlays only) ---- */
+  --shadow-overlay: 0 16px 48px -12px rgba(0, 0, 0, 0.72), 0 2px 8px rgba(0, 0, 0, 0.48);
+  --shadow-raised: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  /* ---- spacing base ---- */
+  --spacing: 0.25rem;
+
+  /* ---- motion (section 7.1) ---- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-instant: 0ms;
+  --duration-fast: 80ms;
+  --duration-base: 120ms;
+  --duration-page: 200ms;
+  --duration-expand: 240ms;
+  --duration-enter: 320ms;
+  --default-transition-duration: var(--duration-base);
+}
+
+/* numeric voice */
+.tabular {
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-family: var(--font-mono);
+}
+
+/* the mandatory focus treatment (section 2.4) */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* reduced motion (section 7.2) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* The accordion's collapsed state is hidden after the closing animation via a
+     transition *delay*; with no animation to wait for, drop the delay too. */
+  .accordion-anim[data-state='closed'] {
+    transition-delay: 0s !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Base layer. The token block above is a verbatim copy of design-system §15 and
+   is asserted by docs/design/check-contrast.mjs. Everything below consumes
+   tokens only — no new --color-* declaration may appear here.
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-selection);
+  }
+
+  /* the sticky nav is 64px; anchors must clear it (§4.3) */
+  [id] {
+    scroll-margin-top: 88px;
+  }
+
+  /* tables and code blocks scroll inside their own wrapper, never the page (§8) */
+  pre,
+  table {
+    max-width: 100%;
+  }
+}
+
+/* Entrance reveal: CSS only, costs no client island (implementation guide §6). */
+@keyframes yrt-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: yrt-reveal var(--duration-enter) var(--ease-standard) both;
+  }
+}
+
+/* The river motif's slow drift — 4s loop, ≤4% opacity, aria-hidden (§7.2). */
+@keyframes yrt-drift {
+  from {
+    transform: translate3d(-2%, 0, 0);
+  }
+  to {
+    transform: translate3d(2%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motif-drift {
+    animation: yrt-drift 4s var(--ease-standard) infinite alternate;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Overlay and disclosure motion. Hand-written so the project does not depend on
+   tw-animate-css; every duration/easing comes from a §7.1 token, and the global
+   `prefers-reduced-motion` block above already flattens these to ~0ms.
+   --------------------------------------------------------------------------- */
+
+@keyframes yrt-accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes yrt-accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes yrt-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes yrt-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.accordion-anim[data-state='open'] {
+  animation: yrt-accordion-down var(--duration-expand) var(--ease-standard);
+}
+
+/* Design-system §6.5 keeps the four detail dimensions in the DOM in every state
+   (`forceMount`), so the collapsed state has to be produced here. Radix cannot
+   help: with `forceMount` its own `isOpen` is `context.open || isPresent`, so it
+   never sets `hidden`, and the region stayed painted and exposed to assistive
+   technology while the trigger claimed `aria-expanded="false"`.
+
+   `visibility: hidden` — delayed until the closing animation finishes — removes
+   the region from the accessibility tree and the paint without unmounting it, so
+   the copy is still in the server HTML the crawler and no-JS visitor receive. */
+.accordion-anim[data-state='closed'] {
+  height: 0;
+  visibility: hidden;
+  animation: yrt-accordion-up var(--duration-expand) var(--ease-standard);
+  transition: visibility 0s linear var(--duration-expand);
+}
+
+.overlay-anim[data-state='open'] {
+  animation: yrt-fade-in var(--duration-page) ease-out;
+}
+
+.sheet-anim[data-state='open'] {
+  animation: yrt-slide-in-right var(--duration-page) ease-out;
+}
+
+/* Hero line-draw: 800ms, once (§7.2). Flattened to ~0ms by the reduced-motion
+   block above; `forwards` means the final frame is what reduced-motion sees. */
+@keyframes yrt-line-draw {
+  from {
+    stroke-dashoffset: 1400;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.line-draw {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: yrt-line-draw 800ms var(--ease-standard) forwards;
+}
+
+/* Order-book depth bars settle once (§7.2). */
+@keyframes yrt-depth-settle {
+  from {
+    transform: scaleX(0.6);
+    opacity: 0.4;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.depth-settle {
+  transform-origin: left center;
+  animation: yrt-depth-settle var(--duration-enter) var(--ease-standard) both;
+}
